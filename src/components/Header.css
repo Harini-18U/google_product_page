@@ -1,0 +1,34 @@
+.navItem {
+    color: #4E6E7E;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    cursor: pointer;
+}
+
+.navItemSelected {
+    color: #219EBC;
+}
+
+.profileContainer {
+    display: "flex";
+
+    width: 60px;
+    height: 36px;
+
+    /* UI Properties */
+    border: 1px solid #219EBC;
+    border-radius: 21px;
+}
+
+.profileContainer > .profileImg {
+    margin-top: 1px;
+    margin-left: 1px;
+    height: 32px;
+    width: 32px;
+    border-radius: 16px;
+}
+
+.profileArrow {
+    width: 20px;
+}

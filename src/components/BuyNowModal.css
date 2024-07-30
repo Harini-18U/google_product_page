@@ -1,0 +1,36 @@
+/* BuyNowModal.css */
+.product-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.product-icon {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-right: 15px;
+  border-radius: 5px;
+}
+
+.product-details {
+  flex: 1;
+}
+
+.invoice-box {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.invoice-box h4 {
+  margin-bottom: 15px;
+}
+
+.invoice-box p {
+  margin: 5px 0;
+}

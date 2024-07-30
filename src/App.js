@@ -1,56 +1,89 @@
-import { createBrowserRouter, RouterProvider, Navigate, redirect } from 'react-router-dom';
-import { AppRoutes } from './router/routes';
-import { CreateAccount, Products, SignIn } from './screens';
+// src/App.jsx
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './redux';
+import { AboutUs, CreateAccount, Home, Services, SignIn } from './screens';
+import ProductList from './components/ProductList';
+import ProductDetails from './components/ProductDetails';
+import { AppRoutes } from './router/routes';
+import Layout from './components/Layout';
 
-function App() {
+const App = () => {
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
-  const protectedRouteLoader = ({ request }) => {
-    if (!localStorage.getItem('isUserLoggedIn')) {
-      let params = new URLSearchParams();
-      params.set("from", new URL(request.url).pathname);
-      return redirect(AppRoutes.sign_in + "?" + params.toString());
-    }
+  useEffect(() => {
+    const loggedIn = localStorage.getItem('isUserLoggedIn');
+    setIsUserLoggedIn(loggedIn === 'true');
+  }, []);
 
-    return null;
+  const handleLogin = () => {
+    setIsUserLoggedIn(true);
+    localStorage.setItem('isUserLoggedIn', 'true');
   };
 
-  const publicRouteLoader = ({ request }) => {
-    if (localStorage.getItem('isUserLoggedIn')) {
-      return redirect(AppRoutes.products);
-    }
+  const handleLogout = () => {
+    setIsUserLoggedIn(false);
+    localStorage.removeItem('isUserLoggedIn');
+  };
 
-    return null;
-  }
+  const [filters, setFilters] = useState({ phones: false, headphones: false, accessories: false });
 
-  const browserRouter = createBrowserRouter([
-    {
-      path: AppRoutes.root,
-      element: <Navigate to={AppRoutes.products} />
-    },
-    {
-      path: AppRoutes.sign_in,
-      loader: publicRouteLoader,
-      element: <SignIn />
-    },
-    {
-      path: AppRoutes.create_account,
-      loader: publicRouteLoader,
-      element: <CreateAccount />
-    },
-    {
-      path: AppRoutes.products,
-      loader: protectedRouteLoader,
-      element: <Products />
-    }
-  ])
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+  };
 
   return (
     <Provider store={store}>
-      <RouterProvider router={browserRouter} />
+      <Router>
+        <Layout
+          isUserLoggedIn={isUserLoggedIn}
+          handleLogout={handleLogout}
+          handleFilterChange={handleFilterChange}
+          filters={filters}
+        >
+          <Routes>
+            <Route
+              path={AppRoutes.root}
+              element={<Navigate to={isUserLoggedIn ? AppRoutes.products : AppRoutes.sign_in} />}
+            />
+            <Route path={AppRoutes.sign_in} element={<SignIn onLogin={handleLogin} />} />
+            <Route path={AppRoutes.create_account} element={<CreateAccount />} />
+            <Route
+              path={AppRoutes.products}
+              element={
+                isUserLoggedIn ? <ProductList filters={filters} /> : <Navigate to={AppRoutes.sign_in} />
+              }
+            />
+            <Route
+              path="/products/:id"
+              element={
+                isUserLoggedIn ? <ProductDetails /> : <Navigate to={AppRoutes.sign_in} />
+              }
+            />
+            <Route
+              path={AppRoutes.services}
+              element={
+                isUserLoggedIn ? <Services /> : <Navigate to={AppRoutes.sign_in} />
+              }
+            />
+            <Route
+              path={AppRoutes.home}
+              element={
+                isUserLoggedIn ? <Home /> : <Navigate to={AppRoutes.sign_in} />
+              }
+            />
+            <Route
+              path={AppRoutes.aboutus}
+              element={
+                isUserLoggedIn ? <AboutUs /> : <Navigate to={AppRoutes.sign_in} />
+              }
+            />
+          </Routes>
+        </Layout>
+      </Router>
     </Provider>
   );
-}
+};
 
 export default App;

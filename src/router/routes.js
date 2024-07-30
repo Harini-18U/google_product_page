@@ -1,6 +1,9 @@
 export const AppRoutes = {
-    root: "/",
-    products:"/products",
-    sign_in: "/signIn",
-    create_account: "/createAccount"
-}
+    root: '/',
+    sign_in: '/sign-in',
+    create_account: '/create-account',
+    products: '/products',
+    services: '/services',
+    home: '/home',
+    aboutus: '/about-us',
+  };  

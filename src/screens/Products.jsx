@@ -1,16 +1,31 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { AppRoutes } from "../router/routes";
+import React, { useState } from 'react';
+import Sidebar from '../components/Sidebar';
+import ProductList from '../components/ProductList';
+import { Container, Row, Col } from 'react-bootstrap';
 
-export const Products = (props) => {
+export const Products = () => {
+  const [filters, setFilters] = useState({
+    phones: false,
+    headphones: false,
+    accessories: false
+  });
 
-    const navigate = useNavigate();
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+  };
 
-    return <div>
-        <p>Products</p>
-        <button onClick={() => {
-            localStorage.clear();
-            navigate(AppRoutes.sign_in);
-        }} >Log out</button>
-    </div>
-}
+  return (
+    <Container fluid>
+      <Row>
+        <Col md={2} className="bg-light p-3">
+          <Sidebar onFilterChange={handleFilterChange} />
+        </Col>
+        <Col md={10}>
+          <ProductList filters={filters} />
+        </Col>
+      </Row>
+    </Container>
+  );
+};
+
+export default Products;
